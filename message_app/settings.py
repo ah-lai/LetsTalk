@@ -39,9 +39,21 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'create_user',
     'rest_framework',
+    'knox',
 ]
 
+# Rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,11 +92,11 @@ WSGI_APPLICATION = 'message_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'message_db',
+        'NAME': 'messanger_db',
         'USER': 'root',
         'PASSWORD': 'password123',
         'HOST': 'localhost', # Or an IP Address that your DB is hosted on
-        'PORT': '',
+        'PORT': '3306',
     },
 }
 
@@ -129,4 +141,13 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+# Location of front end 
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://localhost:8080',
 ]
