@@ -39,17 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'create_user',
     'rest_framework',
+    'rest_framework.authtoken', 
+    'rest_auth',
     'knox',
+    'corsheaders',
+    
 ]
 
-# Rest framework settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    )
-}
 
 
 MIDDLEWARE = [
@@ -62,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'message_app.urls'
 

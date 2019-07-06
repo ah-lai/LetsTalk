@@ -1,31 +1,41 @@
 from rest_framework import serializers
-from .models import User
+from .models import UserInfo
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
+# Seralizer for creating an account
 class CreateUserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
-        fields = ['fname','lname',
-                  'email', 'phone_num', 'location',
-                  'start_date', 'password']
+        fields = ('id', 'username', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
 
-        # Validate if it is a unique email 
+    # Validate user inputs
+    def create(self, validated_data):
+        user = User.objects.create_user(validated_data['username'],
+                                        None,
+                                        validated_data['password'])
+        return user
+        raise serializers.ValidationError("Email Exists.")
 
 
-class UserSerializer():
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        modal = User 
-        fields = ('user_id','email')
+        model = User
+        fields = ('id','username')
 
 
+# Seralizer for login
 class LoginUserSerializer(serializers.Serializer):
-    email = serializers.CharField()
-    password = serializers.CharField() 
+    username = serializers.CharField()
+    password = serializers.CharField()
 
+    # Authenticate user input (username and password)
     def validate(self, data):
-        print(data)
-        user = authenticate(**data) #error occuring here 
-        if user:
+        user = authenticate(**data)
+        if user and user.is_active:
             return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
+
+   

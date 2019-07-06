@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from knox.models import AuthToken
 
 from .models import User
-from .serializers import  CreateUserSerializer, UserSerializer, LoginUserSerializer
+from .serializers import  CreateUserSerializer, LoginUserSerializer, UserSerializer
 
 
 class RegistrationAPI(generics.GenericAPIView):
@@ -15,7 +15,15 @@ class RegistrationAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        return HttpResponse('Account Made') #RENDER? 
+
+        _, token = AuthToken.objects.create(user)
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": token
+        })
+
+       
+    #Now goto registration page and then render chat box  
    
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginUserSerializer
@@ -24,7 +32,11 @@ class LoginAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
+        
+        _, token = AuthToken.objects.create(user)
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)
+            "token": token
         })
+
+        
