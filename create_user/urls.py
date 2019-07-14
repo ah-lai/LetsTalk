@@ -1,4 +1,4 @@
-from .api import  RegistrationAPI, LoginAPI
+from .api import  RegistrationAPI, LoginAPI, UserAPI
 from django.urls import path, include
 
 urlpatterns = [

@@ -1,10 +1,13 @@
 from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response
-from django.http import HttpResponse
+
+from django.contrib.auth.models import User
+
+from django.contrib.auth import login
 
 from knox.models import AuthToken
+from knox.auth import TokenAuthentication
 
-from .models import User
 from .serializers import  CreateUserSerializer, LoginUserSerializer, UserSerializer
 
 
@@ -32,6 +35,8 @@ class LoginAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
+
+        login(request,user)
         
         _, token = AuthToken.objects.create(user)
         return Response({
@@ -39,4 +44,12 @@ class LoginAPI(generics.GenericAPIView):
             "token": token
         })
 
-        
+
+
+class UserAPI(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
