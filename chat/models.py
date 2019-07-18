@@ -6,28 +6,24 @@ from django.contrib.auth import get_user_model
 User = get_user_model
 
 
-class message(models.Model):
-    message_id=models.CharField(max_length=100, null=True, blank=True, unique=True, default=uuid4())
-    #generate a UUID for the message id
+class messageSender(models.Model):
+    user = models.ForeignKey(message_sender, related_name='message', on_delete=models.CASCADE)
+    content=models.CharField(max_length=2000)
+    send_time = models.DateTimeField(auto_now_add=True)
+    
+class messageReciever(models.Model):
+    user = models.ForeignKey(message_reciever, related_name='message', on_delete=models.CASCADE)
     content=models.CharField(max_length=2000)
     send_time = models.DateTimeField(auto_now_add=True)
 
-    class meta:
-        managed=False
-        db_table='message'
-
 
 class message_sender(models.Model):
-     user_id = models.ForeignKey(User, db_column="user_id",on_delete=models.PROTECT)
+     user_id = models.ForeignKey(User, db_column="user_id",on_delete=models.PROTECT,primary_key=True)
+     
 
-    class meta:
-        managed=False
-        db_table='message_sender'
 
 class message_reciever(models.Model):
-    user_id = models.ForeignKey(User, db_column="user_id",on_delete=models.PROTECT)
+    user_id = models.ForeignKey(User, db_column="user_id",on_delete=models.PROTECT,primary_key=True)
 
-    class meta:
-        managed=False
-        db_table='message_reciever'
+
     
