@@ -18,15 +18,13 @@ class message(models.Model):
 
 
 class message_sender(models.Model):
-    message_id = models.ForeignKey(message, db_column="message_id", on_delete=models.PROTECT)
-    user_id = models.ForeignKey(User, db_column="user_id",on_delete=models.PROTECT)
+     user_id = models.ForeignKey(User, db_column="user_id",on_delete=models.PROTECT)
 
     class meta:
         managed=False
         db_table='message_sender'
 
 class message_reciever(models.Model):
-    message_id = models.ForeignKey(message, db_column="message_id", on_delete=models.PROTECT)
     user_id = models.ForeignKey(User, db_column="user_id",on_delete=models.PROTECT)
 
     class meta:
