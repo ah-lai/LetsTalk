@@ -22,6 +22,6 @@ class RecieverSerializer(serializers.ModelSerializer):
     class Meta:
         model = message_reciever
         fields = ('message')
-
         
+ # field may be wrong   
    
