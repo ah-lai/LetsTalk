@@ -16,20 +16,36 @@ class SendMessageAPI(viewsets.ModelViewSet):
 
         token = request.META.get('HTTP_AUTHORIZATION', '')
         content =  request.headers['content']
-        sender_userId =  request.headers['sender_Userid']
+        reciever_userId =  request.headers['reciever_userId']
 
         serializer_message = MessageSerializer(data=content)
         serializer_message.is_valid(raise_exception=True)
-        serializer_message.save()
-        
-        serializer_reciever = RecieverSerializer(data=token)
+        serializer_message.save() #create an instance of a message (?)
+
+        # or should just make get_object
+
+
+
+        try:
+            user_sender = message_sender.get_object(token) #we put the sender id
+        except user_sender.DoesNotExist:
+            print(xxx)
+            # create the user object (sender & reciever)
+
+        try:
+            user_reciever = message_reciever.get_object(reciever_userId) #we put the reciever id
+        except user_reciever.DoesNotExist:
+            print(xxx)
+            # create the user object (sender & reciever)
+
+        serializer_reciever = RecieverSerializer(instance=user_sender)
         serializer_reciever.is_valid(raise_exception=True)
         serializer_reciever.save()
 
-        serializer_sender = SenderSerializer(data=sender_userId)
+        serializer_sender = SenderSerializer(instance=user_reciever)
         serializer_sender.is_valid(raise_exception=True)
         serializer_reciever.save()
 
         return Response({
-            'Successful message sent'      
+            'Successful message sent'
         })
