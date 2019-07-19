@@ -7,23 +7,21 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ('content')
 
 
-
 class SenderSerializer(serializers.ModelSerializer):
     message = MessageSerializer(many=True, read_only=True)
-    
+
     class Meta:
         model = message_sender
         fields = ('message')
 
 
 class RecieverSerializer(serializers.ModelSerializer):
-    message = MessageSerializer(many=True, read_only=True) 
+    message = MessageSerializer(many=True, read_only=True)
     # I think this will make it have content in this object (switch to primary key)
-    
+
     class Meta:
         model = message_reciever
         fields = ('message')
-        
-        
+
         
    
