@@ -38,11 +38,11 @@ class SendMessageAPI(viewsets.ModelViewSet):
         # https://www.django-rest-framework.org/api-guide/relations/#nested-relationships 
         # first example shows how the nested  
         
-        serializer_reciever = RecieverSerializer(instance=user_sender)
+        serializer_reciever = RecieverSerializer(instance=user_sender, message=serializer_message)
         serializer_reciever.is_valid(raise_exception=True)
         serializer_reciever.save()
 
-        serializer_sender = SenderSerializer(instance=user_reciever)
+        serializer_sender = SenderSerializer(instance=user_reciever, message=serializer_message)
         serializer_sender.is_valid(raise_exception=True)
         serializer_reciever.save()
 
