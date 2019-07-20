@@ -11,12 +11,12 @@ class message(models.Model):
 
 class message_sender(models.Model):
     user_id = models.ForeignKey(User, db_column="user_id",on_delete=models.PROTECT,primary_key=True)
-    message_id = models.ForeignKey(User, db_column="id",on_delete=models.PROTECT)
+    #message_id = models.ForeignKey(User, db_column="id",on_delete=models.PROTECT)
 
 
 class message_reciever(models.Model):
     user_id = models.ForeignKey(User, db_column="user_id",on_delete=models.PROTECT,primary_key=True)
-    message_id = models.ForeignKey(User, db_column="id",on_delete=models.PROTECT)
+    #message_id = models.ForeignKey(User, db_column="id",on_delete=models.PROTECT)
 
 
 '''
