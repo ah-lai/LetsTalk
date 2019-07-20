@@ -20,24 +20,24 @@ class SendMessageAPI(viewsets.ModelViewSet):
 
         serializer_message = MessageSerializer(data=content)
         serializer_message.is_valid(raise_exception=True)
-        serializer_message.save() #create an instance of a message (?)
-
-        # or should just make get_object
+        serializer_message.save() #create an instance of a message object
 
 
-
+        # Obtain the user_sender/reciever objects using the foreign key which is linked to the User (?)
+        #  Question: if we have a foreign key between user ID and user_sender ID (is the user sender object create when user is created?)
         try:
-            user_sender = message_sender.get_object(token) #we put the sender id
-        except user_sender.DoesNotExist:
-            print(xxx)
-            # create the user object (sender & reciever)
+            user_sender = message_sender.objects.get(user_id=token) #we need to get user id from token (right now this line is wrong)
+            user_reciever = message_reciever.objects.get(user_id=reciever_userId)
+        expect: 
+            return Response({
+                'Error of finding user'
+            })
 
-        try:
-            user_reciever = message_reciever.get_object(reciever_userId) #we put the reciever id
-        except user_reciever.DoesNotExist:
-            print(xxx)
-            # create the user object (sender & reciever)
-
+            
+        # we use the serializer to link the message with the user object (?)
+        # https://www.django-rest-framework.org/api-guide/relations/#nested-relationships 
+        # first example shows how the nested  
+        
         serializer_reciever = RecieverSerializer(instance=user_sender)
         serializer_reciever.is_valid(raise_exception=True)
         serializer_reciever.save()
