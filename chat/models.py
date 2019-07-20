@@ -19,12 +19,4 @@ class message_reciever(models.Model):
     #message_id = models.ForeignKey(User, db_column="id",on_delete=models.PROTECT)
 
 
-'''
->>> u2 = User(username='alien', first_name='Alien', last_name='Mars', email='alien@example.com')
->>> u2.save()
->>> from datetime import date
->>> a1 = Article(headline="This is a test", pub_date=date(2018, 3, 6), reporter=u1)
-'''
-
-
     
