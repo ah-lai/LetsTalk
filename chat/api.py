@@ -1,4 +1,3 @@
-from rest_framework import viewsets, permissions, generics
 from rest_framework.views import APIView
 from django.http.response import JsonResponse, HttpResponse
 
@@ -35,4 +34,4 @@ class MessageManager(APIView):
 
         return JsonResponse(serializer.data,safe=False)
 
-        # what happens if we get an empty string 
+    

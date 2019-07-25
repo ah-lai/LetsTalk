@@ -24,16 +24,14 @@ class User_manager(APIView):
             "user": UserSerializer(user).data,
             "token": token
         })
-
+    # this doesn't work, request is nothing even if there is key+values
     def get(self,request, format=None):
         
-        pk = request.GET.get('id')
-
-        print(pk)
+        user_id = request.POST.get('id')
 
         #Get One User   
-        if pk:
-            users = User.objects.filter(id=pk)
+        if user_id:
+            users = User.objects.filter(id=user_id)
         #Get all Users
         else:
             users = User.objects.all()
@@ -52,7 +50,7 @@ class LoginAPI(generics.GenericAPIView):
         login(request,user)
         
         _, token = AuthToken.objects.create(user)
-        return Response({
+        return JsonResponse({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token
         })
