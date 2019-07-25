@@ -1,44 +1,40 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from rest_framework.views import APIView
-from rest_framework.response import Response
+from django.http.response import JsonResponse, HttpResponse
 
 from knox.models import AuthToken
 from knox.auth import TokenAuthentication
 
 from create_user.serializers import  UserSerializer
-from .serializers import MessageSerializer, RecieverSerializer, SenderSerializer
+from .serializers import MessageSerializer
 
-from .models import message_sender, message, message_reciever
+from .models import message
 
-class SendMessageAPI(APIView):
-    permission_classes = [permissions.AllowAny, ]
-    authentication_classes = (TokenAuthentication,)
+class MessageManager(APIView):
 
     #Request will have the TOKEN(sender user_id), content, reciver user_id
     def post(self, request, *args, **kwargs):
 
-        #token = request.META.get('HTTP_AUTHORIZATION', '')
-
-        senderID = request.POST.get('senderID')
-        content =  request.POST.get('content')
-        recieverID =  request.POST.get('recieverID')
-
-        print(content)
-
         # Obtain the user_sender/reciever objects using the foreign key which is linked to the User (?)
-        
-        try:
-            user_reciever = message_reciever.objects.get(pk=senderID) 
-        except:
-            user_reciever = message_reciever.objects.create(pk=senderID) 
+        Message = MessageSerializer(data=request.data)
+        Message.is_valid(raise_exception=True)
+        Message.save()
+        return JsonResponse(Message.data, status=201)
 
-        try:
-            user_sender = message_sender.objects.get(pk=recieverID)
-        except:
-            user_sender = message_sender.objects.create(pk=recieverID) 
+    # get for messages
+    def get(self, request, format=None):
 
+        sender = request.POST.get('sender')
+        reciever = request.POST.get('reciever')
 
+        print(sender)
+        print(reciever)
 
-        return Response({
-            'Successful message sent'
-        })
+        unread_messages = message.objects.filter(sender=sender, reciever=reciever, is_read=False)
+        serializer = MessageSerializer(unread_messages, many=True, context={'request': request})
+
+        for messages in unread_messages:
+            messages.is_read = True
+            messages.save()
+
+        return JsonResponse(serializer.data,safe=False)

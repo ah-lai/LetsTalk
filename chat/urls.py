@@ -1,6 +1,6 @@
-from .api import SendMessageAPI  
+from .api import MessageManager  
 from django.urls import path, include
 
 urlpatterns = [
-    path("sendmessage/", SendMessageAPI.as_view()),
+    path("sendmessage/", MessageManager.as_view()),
 ]
