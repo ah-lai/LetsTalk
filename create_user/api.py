@@ -1,5 +1,6 @@
 from rest_framework import viewsets, permissions, generics
-from rest_framework.response import Response
+from django.http.response import JsonResponse, HttpResponse
+from rest_framework.views import APIView
 
 from django.contrib.auth.models import User
 
@@ -11,22 +12,34 @@ from knox.auth import TokenAuthentication
 from .serializers import  CreateUserSerializer, LoginUserSerializer, UserSerializer
 
 
-class RegistrationAPI(generics.GenericAPIView):
-    serializer_class = CreateUserSerializer
+class User_manager(APIView):
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+    def post(self, request, format=None):
+        serializer = CreateUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
         _, token = AuthToken.objects.create(user)
-        return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+        return JsonResponse({
+            "user": UserSerializer(user).data,
             "token": token
         })
 
-       
-    #Now goto registration page and then render chat box  
+    def get(self,request, format=None):
+        
+        pk = request.GET.get('id')
+
+        print(pk)
+
+        #Get One User   
+        if pk:
+            users = User.objects.filter(id=pk)
+        #Get all Users
+        else:
+            users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
    
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginUserSerializer
@@ -43,7 +56,6 @@ class LoginAPI(generics.GenericAPIView):
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token
         })
-
 
 
 class UserAPI(generics.RetrieveAPIView):

@@ -15,7 +15,6 @@ class MessageManager(APIView):
     #Request will have the TOKEN(sender user_id), content, reciver user_id
     def post(self, request, *args, **kwargs):
 
-        # Obtain the user_sender/reciever objects using the foreign key which is linked to the User (?)
         Message = MessageSerializer(data=request.data)
         Message.is_valid(raise_exception=True)
         Message.save()
@@ -27,9 +26,6 @@ class MessageManager(APIView):
         sender = request.POST.get('sender')
         reciever = request.POST.get('reciever')
 
-        print(sender)
-        print(reciever)
-
         unread_messages = message.objects.filter(sender=sender, reciever=reciever, is_read=False)
         serializer = MessageSerializer(unread_messages, many=True, context={'request': request})
 
@@ -38,3 +34,5 @@ class MessageManager(APIView):
             messages.save()
 
         return JsonResponse(serializer.data,safe=False)
+
+        # what happens if we get an empty string 
