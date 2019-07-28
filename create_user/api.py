@@ -1,6 +1,7 @@
 from rest_framework import viewsets, permissions, generics
 from django.http.response import JsonResponse, HttpResponse
 from rest_framework.views import APIView
+from django.shortcuts import redirect, render
 
 from django.contrib.auth.models import User
 
@@ -63,3 +64,7 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+def register_view(request):
+    return render(request, 'register.html', {})
