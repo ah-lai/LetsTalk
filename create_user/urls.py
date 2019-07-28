@@ -1,7 +1,8 @@
-from .api import  RegistrationAPI, LoginAPI, UserAPI
+from .api import  User_manager, LoginAPI, UserAPI, register_view
 from django.urls import path, include
 
 urlpatterns = [
-    path("registration/", RegistrationAPI.as_view()),
+    path("user/", User_manager.as_view()),
     path("login/", LoginAPI.as_view()),
+    path("register/", register_view)
 ]

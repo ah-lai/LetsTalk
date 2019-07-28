@@ -1,0 +1,72 @@
+{% load staticfiles  %}
+{% block form %}
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+        
+</head>
+<body>
+    <h3>
+        Register 
+    </h3>
+    <form id="registration-form" class="form-group">
+        {% csrf_token %}
+        <div class ="row">
+            <div class="input-field col s12">
+                <input name="username" id="id_user" type="text" class="validate">
+                <label for="id_user" data-erro="Username is Taken">Username</label>
+            </div>
+        </div>
+    
+        <div class ="row">
+                <div class="input-field col s12">
+                    <input name="password" id="id_password" type="text">
+                    <label for="id_password">Password</label>
+                </div>
+        </div>
+    
+        <div class ="row">
+                <div class="col s12">
+                <div class="right">
+                    <button type='submit'>Register</button>
+                </div>
+                </div>
+        </div>    
+    </form>
+    
+    <script>
+    $(function () {
+        $('#registration-form').on('submit', function (event) {
+            event.preventDefault();
+            var username = $('#id_user').val();
+            if(username !== '')
+            {
+                    var password = $('#id_password').val();
+                    if(password !== ''){
+                        $.post('user/', '{"username": "' + username + '", "password": "' + password + '"}',
+                        function (data) {
+                            console.log(data);
+                            window.location = '/';
+                        }).fail(function (response) {
+                            $('#id_username').addClass('invalid');
+                        })
+                    }
+    
+                    else
+                        alert("Please Enter a Valid Password!")
+                }
+                else
+                    alert("Please Enter a Valid Username!");
+        })
+    })
+    </script>
+    {% endblock %}
+
+
+</body>
+</html>
+
+
+
