@@ -1,30 +1,12 @@
-from rest_framework import viewsets, permissions, generics
-from django.http.response import JsonResponse, HttpResponse
+from django.http.response import JsonResponse
 from rest_framework.views import APIView
-from django.shortcuts import redirect, render
 
 from django.contrib.auth.models import User
 
-from django.contrib.auth import login
-
-from knox.models import AuthToken
-from knox.auth import TokenAuthentication
-
-from .serializers import  CreateUserSerializer, LoginUserSerializer, UserSerializer
+from .serializers import UserSerializer
 
 
-class User_manager(APIView):
-
-    def post(self, request, format=None):
-        serializer = CreateUserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-
-        _, token = AuthToken.objects.create(user)
-        return JsonResponse({
-            "user": UserSerializer(user).data,
-            "token": token
-        })
+class User_manager(APIView):        
     # this doesn't work, request is nothing even if there is key+values
     def get(self,request, format=None):
         
@@ -38,33 +20,3 @@ class User_manager(APIView):
             users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return JsonResponse(serializer.data, safe=False)
-
-   
-class LoginAPI(generics.GenericAPIView):
-    serializer_class = LoginUserSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-
-        login(request,user)
-        
-        _, token = AuthToken.objects.create(user)
-        return JsonResponse({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": token
-        })
-
-
-class UserAPI(generics.RetrieveAPIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-    authentication_classes = (TokenAuthentication,)
-    serializer_class = UserSerializer
-
-    def get_object(self):
-        return self.request.user
-
-
-def register_view(request):
-    return render(request, 'register.html', {})

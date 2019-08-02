@@ -37,17 +37,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'create_user',
+
     'rest_framework',
-    'knox',
+    'rest_auth',
+    'rest_framework.authtoken',
+    'rest_auth.registration',    
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'corsheaders',
+
+    'frontend',
+    'create_user',
     'chat',
-    
 ]
+
+SITE_ID = 1
 
 # Rest framework settings
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+        ] 
     }
 
 MIDDLEWARE = [

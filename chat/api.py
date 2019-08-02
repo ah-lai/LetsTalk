@@ -1,9 +1,6 @@
 from rest_framework.views import APIView
 from django.http.response import JsonResponse, HttpResponse
 
-from knox.models import AuthToken
-from knox.auth import TokenAuthentication
-
 from create_user.serializers import  UserSerializer
 from .serializers import MessageSerializer
 
