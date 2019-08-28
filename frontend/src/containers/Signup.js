@@ -24,13 +24,13 @@ import {NavLink} from 'react-router-dom';
       this.props.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
             this.props.onAuth(
-                values.userName,
+                values.username,
                 values.email,
                 values.password,
                 values.confirm);
         }
       });
-    //this.props.history.push('/'); //redirect to message
+      this.props.history.push('/login'); //redirect to login
     };
   
     handleConfirmBlur = e => {
@@ -147,7 +147,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (username,email,password) => dispatch(actions.authSignup(username,email,password))
+        onAuth: (username,email,password,confirm) => dispatch(actions.authSignup(username,email,password,confirm))
     }
 }
 

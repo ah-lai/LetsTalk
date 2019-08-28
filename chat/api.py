@@ -16,19 +16,12 @@ class MessageManager(APIView):
         Message.save()
         return JsonResponse(Message.data, status=201)
 
+class getMessage(APIView):
     # get for messages
-    def get(self, request, format=None):
-
-        sender = request.POST.get('sender')
-        reciever = request.POST.get('reciever')
-
-        unread_messages = message.objects.filter(sender=sender, reciever=reciever, is_read=False)
-        serializer = MessageSerializer(unread_messages, many=True, context={'request': request})
-
-        for messages in unread_messages:
-            messages.is_read = True
-            messages.save()
+    def post(self, request, format=None):
+        userID = request.data['userID']
+        messages = message.objects.filter(reciever=userID)
+        serializer = MessageSerializer(messages, many=True, context={'request': request})
 
         return JsonResponse(serializer.data,safe=False)
-
     

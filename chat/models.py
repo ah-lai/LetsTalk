@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
 class message(models.Model):
     content=models.CharField(max_length=2000)
     send_time = models.DateTimeField(auto_now_add=True)
@@ -11,6 +12,10 @@ class message(models.Model):
 
     class Meta:
         managed = True
+
+    
+
+        
 
     
 

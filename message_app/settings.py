@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
     'corsheaders',
 
     'frontend',
@@ -63,9 +64,14 @@ REST_FRAMEWORK = {
         ] 
     }
 
+REST_AUTH_SERIALIZERS = {
+    'TOKEN_SERIALIZER': 'message_app.serializers.TokenSerializer',
+}
+    
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
