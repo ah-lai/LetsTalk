@@ -3,26 +3,23 @@ import axios from 'axios';
 
 export default class MessageList extends React.Component{
 
-
+    state = {
+      messages: [],
+      isLoading: true,
+      errors: null,
+      senderID: null
+    };
 
     componentDidMount(){
+ 
         this.getMessage();
         this.interval = setInterval(() => {
             this.getMessage();
           }, 1000);
-    }
-
-    state = {
-      messages: [],
-      isLoading: true,
-      errors: null 
-    };
-    
+    }   
 
     getMessage() {
         const userID = localStorage.getItem('userID')
-
-        console.log(userID)
 
         axios.post('http://127.0.0.1:8000/getmessage/',{userID: userID})
 
@@ -42,6 +39,12 @@ export default class MessageList extends React.Component{
 
     render() {
         const { isLoading, messages } = this.state;
+
+        let url = window.location.href;
+        var urlParams = window.location.search; 
+        urlParams = urlParams.slice(1);
+        console.log(urlParams)
+
         return (
           <React.Fragment>
             <div>

@@ -15,7 +15,7 @@ class NormalLoginForm extends React.Component {
         this.props.onAuth(values.username,values.password);
       }
     });
-    this.props.history.push('/messanger'); //redirect to message
+    this.props.history.push('/contactlist'); //redirect to message
   };
 
   render() {

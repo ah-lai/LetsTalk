@@ -9,11 +9,7 @@ import {
   } from 'antd';
 import {connect} from 'react-redux';
 import * as actions from'../store/actions/auth';
-import {NavLink} from 'react-router-dom';
-  
-  const { Option } = Select;
-  const AutoCompleteOption = AutoComplete.Option;
-    
+      
   class RegistrationForm extends React.Component {
     state = {
       confirmDirty: false,
